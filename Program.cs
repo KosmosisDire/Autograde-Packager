@@ -118,11 +118,12 @@ if (update.ToLower() == "y" || update.ToLower() == "yes")
         return;
     }
 
-    string[] cppfiles = requiredFiles.Where(x => x.EndsWith(".cpp")).ToArray();
-
     int testNum = 0;
     foreach (var run_test in run_tests)
     {
+        string cpptext = File.ReadAllText(run_test.Replace("run_test", "test.cpp")).Replace(" ", "");
+        string[] cppfiles = requiredFiles.Where(x => x.EndsWith(".cpp") && cpptext.Contains($"#include\"{x.Replace(".cpp", ".h")}\"")).ToArray();
+
         File.WriteAllText(run_test, String.Empty);
         FileStream run_testWrite = File.OpenWrite(run_test);
         StreamWriter run_testWriter = new StreamWriter(run_testWrite);
