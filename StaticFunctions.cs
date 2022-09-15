@@ -158,6 +158,7 @@ public static class StaticFunctions
     {
         var run_tests = Directory.GetFiles(assignmentPath, "run_test", SearchOption.AllDirectories).ToList();
         run_tests.Sort((a, b) => string.Compare(a,b));
+        run_tests = run_tests.Select(x => x.Replace("\\", "/")).ToList();
 
         if (run_tests.Count == 0)
         {
@@ -169,6 +170,7 @@ public static class StaticFunctions
         int testNum = 0;
         foreach (var run_test in run_tests)
         {
+            string parentDirName = run_test.Split('/')[^2];
             string cpptext = File.ReadAllText(run_test.Replace("run_test", "test.cpp")).Replace(" ", "");
             string[] cppfiles = requiredFiles.Where(x => x.EndsWith(".cpp") && cpptext.Contains($"#include\"{x.Replace(".cpp", ".h")}\"")).ToArray();
 
@@ -179,9 +181,9 @@ public static class StaticFunctions
             run_testWriter.WriteLine("");
             
             if(cppfiles.Length > 0)
-                run_testWriter.WriteLine($"g++ -O0 -std=c++17 test.cpp ../Check.cpp ../{string.Join(" ../", cppfiles)} -I ../ -o testex.exe  2> ../../../output" + testNum + ".txt");
+                run_testWriter.WriteLine($"g++ -O0 -std=c++17 test.cpp ../Check.cpp \"../{string.Join("\" \"../", cppfiles)}\" -I ../ -o testex.exe  2> \"../../../output" + parentDirName + ".txt\"");
             else
-                run_testWriter.WriteLine($"g++ -O0 -std=c++17 test.cpp ../Check.cpp -I ../ -o testex.exe  2> ../../../output" + testNum + ".txt");
+                run_testWriter.WriteLine($"g++ -O0 -std=c++17 test.cpp ../Check.cpp -I ../ -o testex.exe  2> \"../../../" + parentDirName + ".txt\"");
             
             run_testWriter.WriteLine("./testex.exe");
             run_testWriter.Close();
