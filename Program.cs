@@ -129,7 +129,12 @@ if (update.ToLower() == "y" || update.ToLower() == "yes")
         StreamWriter run_testWriter = new StreamWriter(run_testWrite);
         run_testWriter.WriteLine("#!/usr/bin/env bash");
         run_testWriter.WriteLine("");
-        run_testWriter.WriteLine($"g++ -O0 -std=c++17 test.cpp ../Check.cpp ../{string.Join(" ../", cppfiles)} -I ../ -o testex.exe  2> ../../../output" + testNum + ".txt");
+        
+        if(cppfiles.Length > 0)
+            run_testWriter.WriteLine($"g++ -O0 -std=c++17 test.cpp ../Check.cpp ../{string.Join(" ../", cppfiles)} -I ../ -o testex.exe  2> ../../../output" + testNum + ".txt");
+        else
+            run_testWriter.WriteLine($"g++ -O0 -std=c++17 test.cpp ../Check.cpp -I ../ -o testex.exe  2> ../../../output" + testNum + ".txt");
+        
         run_testWriter.WriteLine("./testex.exe");
         run_testWriter.Close();
         run_testWrite.Close();
