@@ -245,7 +245,7 @@ public static class StaticFunctions
             else
                 run_testWriter.WriteLine($"g++ -O0 -std=c++17 test.cpp ../Check.cpp -I ../ -o testex.exe  2> \"../../../" + parentDirName + ".txt\"");
             
-            run_testWriter.WriteLine("./testex.exe");
+            run_testWriter.WriteLine("./testex.exe 2> \"../../../" + parentDirName + ".log\"");
             run_testWriter.Close();
             run_testWrite.Close();
             testNum++;
